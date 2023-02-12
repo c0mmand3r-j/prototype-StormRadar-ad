@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Storm Tap/Hold Gallery Demo</title>
+  <style media="screen">
+    body{margin:0;background: #333;}
+  	#container{
+      width:100%;
+      position: relative;
+    }
+    #labBtnClose {
+			position: absolute;
+      right: 0;
+      width: 14px;
+      height: auto;
+			z-index: 5 !important;
+      padding: 10px;
+			cursor: pointer;
+		}
+      
+      
+/* EXPAND BUTTON */
+      
+.button{
+  display:inline-block;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 600;
+  letter-spacing: 1px;
+  overflow:hidden;
+  position: relative;
+  z-index:1;
+  margin:1rem;
+}
+      
+.expbutton{
+  background: rgba(80,80,80, .7);
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+}
+      
+
+.button-thick{
+  padding: 3px 18px; /* TOP/BOTTOM, RIGHT/LEFT */
+}
+
+/* Expand Button, COLLAPSE Button Arrows */
+.downarrow {
+    position: relative;
+    font-size: 8px;
+    bottom: 1px;
+    padding: 4px;
+} 
+      
+/* EXPAND BUTTON */  
+      
+      
+    #labBtnExpand {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 120px;
+      z-index: 5 !important;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.65);
+		}
+      
+      
+      
+    #labBtnRotate {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 170px;
+      z-index: 5;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.65);
+    }
+    #labContent,
+		#labContentLandscape {
+			display: block;
+			position: relative;
+			z-index: 1;
+			/* margin: -5px auto 0 auto; */
+			overflow: hidden;
+      background-image: url("https://s.w-x.co/ads/creatives/dev/stormradar/bg.jpg");
+      background-position: 50% 0;
+      background-repeat: no-repeat;
+		}
+    #labContentOpen{
+      position: relative;
+      height: 304px;
+      margin: 0 auto;
+      max-width: 414px;
+      overflow: hidden;
+    }
+    #labContentClosed{
+      position: relative;
+      height: 95px;
+      margin: 0 auto;
+      max-width: 414px;
+      overflow: hidden;
+    }
+    #labContentLandscape {
+			/* opacity: 0;
+			-webkit-transition: opacity .75s ease-in;
+			-moz-transition: opacity .75s ease-in;
+			-ms-transition: opacity .75s ease-in;
+			transition: opacity .75s ease-in; */
+		}
+
+    #labContentOpen div,
+		#labContentOpen img,
+    #labContentClosed div,
+		#labContentClosed img,
+    #labContentLandscape div,
+		#labContentLandscape img{
+      position: absolute;
+			height: auto;
+      margin: auto;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* STORM SWIPER CSS */
+    #labContentSurface{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 3;
+    }
+    #feedback{
+      position: absolute;
+      z-index: 10 !important;
+      font-weight: bold;
+      color: rgb(24, 55, 158);
+      background: #fff;
+      font-size: .75em;
+    }
+    /*OPEN Els  */
+    #stormBG{width: 100vw; max-width: 414px; z-index: 0;}
+    #stormCTA{width: 134px; z-index: 5; left:52px; bottom: 5px;}
+    #stormHeadline{width: 100vw; max-width: 414px; z-index: 2;}
+    #stormLogo{width: 100vw; max-width: 414px; z-index: 1;}
+    #stormDevice{width: 100vw; max-width: 414px; z-index: 2;}
+    #stormClosedContent{width: 100vw; max-width: 414px; z-index: 0; cursor: pointer;}
+    #stormLandscapeContent{width: 100vw; max-width: 414px; z-index: 0; cursor: pointer; left: 0;right: 0;}
+
+    /*CLOSED Els layout used for screenshot of storm-closed-414x95.png
+        #stormBGClosed{width: 100vw; max-width: 414px; z-index: 0;}
+        #stormHeadlineClosed {max-width: 300px;	z-index: 3;	left: 125px; top: -26px;}
+        #stormLogoClosed{max-width: 370px; z-index: 1;left: -28px; top: -2px;}
+        #stormDeviceClosed {width: 100vw;	z-index: 2;	left: 32px;	top: -90px;	max-width: 400px;}
+        #stormDeviceIntroClosed {top: -97px; left: 18px; max-width: 400px;}*/
+    .stormDeviceScreen{
+      width: 100vw;
+      max-width: 414px;
+      z-index: 1;
+      animation-duration: .5s;
+      animation-timing-function: ease-out;
+    }
+    .stormStripe{
+      width: 100vw;
+      max-width: 414px;
+      animation-duration: .5s;
+    }
+    .storm-hidden{opacity: 0;}
+
+    .adOpen{
+      animation-name: adOpen-anim;
+      animation-duration: 1.0s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    .adClose{
+      animation-name: adClose-anim;
+      animation-duration: .5s;
+      animation-timing-function: ease-in;
+      animation-fill-mode: forwards;
+    }
+    .contentOpen{
+      animation-name: fade-in;
+      animation-duration: .45s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    .contentClose{
+      animation-name: fade-out;
+      animation-duration: .5s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    .screen-in{animation-name: fade-in;}
+    .screen-out{animation-name: fade-out;}
+    .stripe-right-in{animation-name: swipe-right-in;}
+    .stripe-right-out{animation-name: swipe-right-out;}
+    .stripe-left-in{animation-name: swipe-left-in;}
+    .stripe-left-out{animation-name: swipe-left-out;}
+
+    @keyframes adOpen-anim {
+      0%   {
+          height: calc(100vw * (95/414));
+          max-height: 95px;
+      }
+      100% {
+          height: calc(100vw * (304/414));
+          max-height: 304px;
+      }
+    }
+
+    @keyframes adClose-anim {
+      0%   {
+        height: calc(100vw * (304/414));
+        max-height: 304px;
+      }
+      100% {
+        height: calc(100vw * (95/414));
+        max-height: 95px;
+      }
+    }
+
+    @keyframes swipe-right-in {
+      0%   {
+          transform: translateX(-414px);
+      }
+      100% {
+          transform: translateX(0px);
+      }
+    }
+
+    @keyframes swipe-left-in {
+      0%   {
+          transform: translateX(414px);
+      }
+      100% {
+          transform: translateX(0px);
+      }
+    }
+
+    @keyframes swipe-right-out {
+      0%   {
+          transform: translateX(0px);
+      }
+      100% {
+          transform: translateX(414px);
+      }
+    }
+    @keyframes swipe-left-out {
+      0%   {
+          transform: translateX(0px);
+      }
+      100% {
+          transform: translateX(-414px);
+      }
+    }
+    @keyframes fade-out {
+      0%   {
+          opacity: 1;
+      }
+      100% {
+          opacity: 0;
+      }
+    }
+    @keyframes fade-in {
+      0%   {
+          opacity: .5;
+          /* filter: blur(5px); */
+      }
+      100% {
+          opacity: 1;
+          /* filter: blur(0px); */
+      }
+    }
+
+    /* Adjust for viewports less than ad width */
+    @media screen and (max-width: 413px) {
+      #labContentOpen {
+      	height: calc(100vw * (304/414));
+      }
+      #labContentClosed {
+      	height: calc(100vw * (95/414));
+      }
+      #stormCTA{width:33vw; left: 5vw;}/* calculated width by btn-width/layout-width or 134/414 = .33 */
+
+      @keyframes swipe-right-in {
+        0%   {
+            transform: translateX(-100vw);
+        }
+        100% {
+            transform: translateX(0px);
+        }
+      }
+
+      @keyframes swipe-left-in {
+        0%   {
+            transform: translateX(100vw);
+        }
+        100% {
+            transform: translateX(0px);
+        }
+      }
+
+      @keyframes swipe-right-out {
+        0%   {
+            transform: translateX(0px);
+        }
+        100% {
+            transform: translateX(100vw);
+        }
+      }
+      @keyframes swipe-left-out {
+        0%   {
+            transform: translateX(0px);
+        }
+        100% {
+            transform: translateX(-100vw);
+        }
+      }
+    }
+
+    /* handle orientation changes */
+		/* Portrait */
+		@media screen and (orientation: portrait) {
+			#labContent {
+				display: block;
+			}
+
+			#labContentLandscape {
+				display: none;
+			}
+		}
+
+		/* Landscape */
+		@media screen and (orientation: landscape) {
+			#labContent,
+			#labBtnExpand {
+				display: none;
+			}
+
+			#labContentLandscape {
+				display: block;
+				opacity: 1;
+				height: 90px;
+			}
+
+		}
+
+    /* apply dark background-color for widths wider than ad */
+		@media screen and (min-width: 414px) {
+			#labContent {
+				background-color: #333;
+			}
+		}
+
+    .lab-hidden{display: none;}
+    .lab-trans {
+			-webkit-transition: all .25s ease-out;
+			-moz-transition: all .25s ease-out;
+			-ms-transition: all .25s ease-out;
+			transition: all .25s ease-out;
+		}
+      
+      
+      
+/* TAP-HOLD STYLE  */      
+#phonedevice{
+    position: absolute;  
+}
+
+#tapholdtxt{
+    position: absolute;
+  
+}
+
+
+#lockup{
+    position: absolute;
+ 
+}
+
+
+
+#tapzone {
+  position: absolute;
+   
+}
+
+#reveal {
+  position: absolute;
+  
+    z-index: -1;
+}
+
+
+.tap-1, 
+.tap-2 {
+	fill: transparent;
+	stroke: #fff;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+    z-index: -1;
+}
+
+.hand-double {
+	fill: #000;
+	stroke: #fff;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+    z-index: -1;
+}
+
+
+ 
+.tap-1 {
+	opacity: .5;
+}
+
+ 
+.tap-2 {
+	opacity: .25;
+}
+
+
+.hand-double {
+	animation: tap-double 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.tap-1,
+.tap-2 {
+	animation: tap-circle 1.25s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.tap-2 {
+	animation-delay: 0.2s;
+}
+
+
+/* ANIMATION KEYFRAMES */
+
+@keyframes tap-double {
+	0% {
+		transform: rotateX(0deg);
+	}
+	10% {
+		transform: rotateX(12.5deg);
+	}
+	25% {
+		transform: rotateX(25deg);
+	}
+	35% {
+		transform: rotateX(10deg);
+	}
+	50% {
+		transform: rotateX(25deg);
+	}
+}
+
+@keyframes tap {
+	0% {
+		transform: rotateX(0deg);
+	}
+	10% {
+		transform: rotateX(12.5deg);
+	}
+	25% {
+		transform: rotateX(25deg);
+	}
+}
+ 
+      
+      
+/* TAP-HOLD STYLE  */  
+      
+  </style>
+</head>
+    
+  <!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+<script src="https://s.w-x.co/ads/creatives/_codelib/greensock/TimelineLite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/plugins/CSSPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/easing/EasePack.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenLite.min.js"></script>    
+    
+    
+<body>
+  <div id="container">
+    <div id="labBG"></div>
+      
+      
+    <div id="labContent" class="lab-hidden">
+      
+        
+        
+        
+      <div id="labContentOpen" class="lab-hidden">
+        <img id="labBtnClose" src="https://s.w-x.co/ads/creatives/bwbb/btn_close_thick_red.png" draggable="false">
+
+         <div id="tapzone">
+          <img id="stormCTA" src="https://s.w-x.co/ads/creatives/dev/stormradar/cta.png" alt="Get The App" draggable="false">     
+          <img id="phonedevice" src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/p1.jpg" draggable="false">
+          <img id="tapholdtxt" src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/p2.png" draggable="false">
+          <img id="lockup" draggable="false" src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/lockup.png" draggable="false"> 
+         </div>    
+          
+          
+          
+        <div id="reveal">
+        <img id="lockup" draggable="false" src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/lockup.png"> 
+
+        <video id="stormvideo" width="414" height="304" loop>
+        <source src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/bg_loop.mp4" type="video/mp4">
+        </video>    
+        </div>
+          </div>
+        <div id="feedback"></div>
+      
+        
+        
+        
+      <div id="labContentClosed" class="lab-hidden">
+        <!--<img src="http://creativepreview.wideout.com/TWC/TWC410/images/expBtn.png" id="labBtnExpand" class="lab-trans">-->
+        <div id="labBtnExpand" class="button expbutton button-thick lab-trans"><span class ="downarrow">▼</span> Expand <span class ="downarrow">▼</span></div>  
+        <img id="stormClosedContent" src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/closed.png" alt="Storm Radar App with 20 Advanced Map Layers" draggable="false">
+        <!-- CLOSED Els layout used for screenshot of storm-closed-414x95.png  -->
+				<!-- <img id="stormHeadlineClosed" src="https://s.w-x.co/ads/creatives/dev/stormradar/headline-414x304.png" alt="20 Advanced Map Layers" draggable="false">
+        <img id="stormDeviceClosed" class="stormDevice" src="https://s.w-x.co/ads/creatives/dev/stormradar/device-iso-030718-tiny.png" alt="Mobile Device" draggable="false">
+        <img id="stormDeviceIntroClosed" class="stormDeviceScreen" src="https://s.w-x.co/ads/creatives/dev/stormradar/device-screen-00-030718-tiny.png" alt="Storm Radar App" draggable="false">
+        <img id="stormLogoClosed" src="https://s.w-x.co/ads/creatives/dev/stormradar/storm-logo-414x304.png" alt="Storm Radar Logo" draggable="false">
+        <img id="stormBGClosed" src="https://s.w-x.co/ads/creatives/dev/stormradar/bg.jpg" alt="Stormy Background"> -->
+      </div>
+        
+        
+        
+        
+    </div>
+    <div id="labContentLandscape">
+      <img src="http://creativepreview.wideout.com/TWC/TWC410/images/rotateBtn.png" id="labBtnRotate" class="lab-trans">
+      <img id="stormLandscapeContent" src="https://s.w-x.co/ads/creatives/dev/stormradar/storm-closed-414x95-tiny.png" alt="Storm Radar App with 20 Advanced Map Layers" draggable="false">
+    </div>
+  </div>
+  <script type="text/javascript">
+    var lA = {
+      e:{} // just a container for element pointers instead of using separate vars
+    }
+    var lC = {
+      els:{
+        content:{id:'labContent'}
+      },
+      state:'open'
+    };
+    var touch = {
+      swipedir:'none',
+      distX:0,
+      distY:0,
+      initialTouchPos:{x:0, y:0},
+      lastTouchPos:{x:0, y:0},
+      rect:{}, // getBoundingClientRect props
+      threshold:8, // min required distance to qualify as a swipe
+      restraint:100, // max allowable perpendicular sway
+      allowedTime:500, // max swipe time
+      elapsedTime:0,
+      startTime:0,
+      handleswipe:null
+    }
+
+    var slides = {
+      currentSlide:0,
+      dir: "https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/",
+      ready:false, // have additional els been added to DOM
+      interact:false, //
+      aImgs:[
+        {src:'stripe1-414x304.png', alt:'Temperature', id:'stormStripe1', type:'stripe'},
+        {src:'stripe2-414x304.png', alt:'Wind Speed', id:'stormStripe2', type:'stripe'},
+        {src:'stripe3-414x304.png', alt:'Predictive Radar', id:'stormStripe3', type:'stripe'},
+        {src:'screen_insitu-01.png', alt:'Temperature Layer', id:'stormScreen1', type:'screen'},
+        {src:'screen_insitu-02.png', alt:'Wind Speed Layer', id:'stormScreen2', type:'screen'},
+        {src:'screen_insitu-03.png', alt:'Predictive Radar Layer', id:'stormScreen3', type:'screen'}
+      ],
+      aScreens:[],
+      aStripes:[]
+    }
+    
+    
+    
+//TAP-HOLD FUNCTIONALITY //
+    
+// Get a reference to an element
+var tl = new TimelineLite();
+var tapzone = document.querySelector('#tapzone');
+var taptext = document.querySelector('#tapholdtxt');
+var myvid = document.querySelector('#stormvideo');
+
+introToDevice();
+
+function introToDevice(){
+// Intro Animation //
+tl.from("#tapholdtxt", 0.8, {alpha:0}, 1.4);
+};
+
+
+
+// Create a manager to manager the element
+var manager = new Hammer.Manager(tapzone);
+
+// Create a recognizer
+var Press = new Hammer.Press({
+  time: 200
+});
+
+// Add the recognizer to the manager
+manager.add(Press);
+
+
+// Subscribe to desired event
+manager.on('press', function(e) {
+ // e.target.classList.toggle('taptoreveal.hide-opacity');
+    myvid.play();
+    fadeOutEffect();
+    console.log(" ---- press ----- ");
+    
+});
+
+
+
+// Subscribe to desired event
+manager.on('pressup', function(e) {
+ // e.target.classList.toggle('taptoreveal.hide-opacity');
+    tl.to(tapzone, 0.8, {alpha:1});
+    myvid.pause();
+    console.log(" ---- press  up----- ");
+    
+});
+
+
+
+function fadeOutEffect() {
+    var fadeTarget = document.getElementById("tapzone");
+    var fadeEffect = setInterval(function () {
+
+        if (!fadeTarget.style.opacity) {
+            fadeTarget.style.opacity = 1;
+        }
+        if (fadeTarget.style.opacity < 0.1) {
+            clearInterval(fadeEffect);
+        } else {
+            fadeTarget.style.opacity -= 0.1;
+        }
+    }, 50);
+
+};
+
+
+function fadeItback() {
+    var fadeinTarget = document.getElementById("tapzone");
+         myvid.pause();
+         var fadeInEffect = setInterval(function () {
+
+        if (!fadeinTarget.style.opacity) {
+            fadeinTarget.style.opacity = 0;
+        }
+        if (fadeinTarget.style.opacity < 1) {
+            clearInterval(fadeInEffect);
+        } else {
+            fadeinTarget.style.opacity += 1;
+        }
+    }, 50);
+        
+    console.log(":::FADE BACK TO HOME SCREEN ::::");
+
+};
+
+//end of TAP-HOLD FUNCTIONALITY //
+
+    
+    
+
+    function init(){
+      // element vars
+      lA.e.content = document.getElementById('labContent');
+      lA.e.contentOpen = document.getElementById('labContentOpen');
+      lA.e.contentClosed = document.getElementById('labContentClosed');
+      //lA.e.contentSurfaceDiv = document.getElementById('labContentSurface');
+      // init touch surface and events
+      //swiperInit();
+      // click tests
+      lA.e.ctaBtn = document.getElementById('stormCTA');
+      lA.e.ctaBtn.onclick = function(evt){
+        exitClick(evt);
+      }
+
+      lA.e.closedContent = document.getElementById('stormClosedContent');
+      lA.e.closedContent.onclick = function(evt){
+        exitClick(evt);
+      }
+      lA.e.landscapeContent = document.getElementById('stormLandscapeContent');
+      lA.e.landscapeContent.onclick = function(evt){
+        exitClick(evt);
+      }
+      lA.e.closeBtn = document.getElementById('labBtnClose');
+      lA.e.closeBtn.onclick = function(evt){
+        // adClose();
+        toggleState();
+      }
+      lA.e.expandBtn = document.getElementById('labBtnExpand');
+      lA.e.expandBtn.onclick = function(evt){
+        // adOpen();
+        toggleState();
+      }
+
+      // open or close based on state
+      if (lC.state == "open") {
+        adOpen();
+      } else {
+        adClose();
+      }
+      // toggleState();
+    }
+
+      
+      /*
+    function swiperInit(){
+      // define the touch surface
+      touch.surface = document.getElementById('labContentSurface');
+      // capture size and placement of surface which covers entire ad in this case
+      touch.rect = touch.surface.getBoundingClientRect();
+      // capture browser-specific CSS animation end event name for callback usage
+      //touch.animEndEvent = getAnimationEndEventName();
+      // init gesture detection on surface
+      swipeDetect(touch.surface, function(swipedir){
+        var feedback = document.getElementById('feedback');
+        feedback.style.display = 'none';
+        // slide management
+        switch (swipedir) {
+          case 'left':
+            slideShow(slides.currentSlide + 1);
+            break;
+          case 'right':
+            slideShow(slides.currentSlide - 1);
+            break;
+          case 'down':
+            feedback.style.display = 'block';
+            break;
+          case 'up':
+            feedback.style.display = 'none';
+            break;
+          default: // also supports up and down gestures
+            console.log("no swipe detection");
+
+            break;
+        }
+
+      });
+    }
+*/
+    function adOpen(){
+      // set animation classes
+      lA.e.content.className = 'adOpen';
+      lA.e.contentOpen.className = 'contentOpen';
+      lA.e.contentClosed.className = 'contentClose';
+      // listeners to remove anim classes
+     // lA.e.contentOpen.addEventListener(touch.animEndEvent, animEndCallback);
+    //  lA.e.contentClosed.addEventListener(touch.animEndEvent, animEndCallback);
+      // hide touch surface when closed
+     // lA.e.contentSurfaceDiv.style.display = 'block';
+    }
+
+    function adClose(){
+      // set animation classes
+      lA.e.content.className = 'adClose';
+      lA.e.contentOpen.className = 'contentClose';
+      lA.e.contentClosed.className = 'contentOpen';
+      // listeners to remove anim classes
+  //    lA.e.contentOpen.addEventListener(touch.animEndEvent, animEndCallback);
+  //    lA.e.contentClosed.addEventListener(touch.animEndEvent, animEndCallback);
+      // hide touch surface when closed
+   //   lA.e.contentSurfaceDiv.style.display = 'none';
+    }
+
+    function toggleState(){
+      // console.log('toggleState - start - ' + lC.state);
+      // update the state before acting
+      if (lC.state === 'closed') {
+        lC.state = 'open';
+        adOpen();
+      }else{
+        lC.state = 'closed';
+        adClose();
+      }
+
+      // // set animation classes
+      // lA.e.content.className = (lC.state === 'closed') ? 'adClose' : 'adOpen';
+      // lA.e.contentOpen.className = (lC.state === 'closed') ? 'contentClose' : 'contentOpen';
+      // lA.e.contentClosed.className = (lC.state === 'closed') ? 'contentOpen' : 'contentClose';
+      // // listeners to remove anim classes
+      // lA.e.contentOpen.addEventListener(touch.animEndEvent, animEndCallback);
+      // lA.e.contentClosed.addEventListener(touch.animEndEvent, animEndCallback);
+      // // hide touch surface when closed
+      // lA.e.contentSurfaceDiv.style.display = (lC.state === 'closed') ? 'none' : 'block';
+
+      // console.log('toggleState - end - ' + lC.state);
+    }
+
+    // function showContents(evt){
+    //   console.log("adOpen -> showContents cb", evt);
+    //   evt.target.removeEventListener(touch.animEndEvent, showContents);
+    //   evt.target.className = '';
+    // }
+    //
+    // function hideContents(evt){
+    //   console.log("adOpen -> hideContents cb", evt);
+    //   evt.target.removeEventListener(touch.animEndEvent, hideContents);
+    //   evt.target.className = 'lab-hidden';
+    // }
+
+    function exitClick(evt){
+      console.log(evt.target.id, evt);
+    }
+
+    
+/*
+    function swipeDetect(el, callback){
+      // use callback argument or create dummy callback
+      touch.handleswipe = callback || function(swipedir) {};
+      // Check if pointer events are supported.
+      if (window.PointerEvent) {
+        // Add Pointer Event Listener
+        touch.surface.addEventListener('pointerdown', handleGestureStart, true);
+        touch.surface.addEventListener('pointermove', handleGestureMove, true);
+        touch.surface.addEventListener('pointerup', handleGestureEnd, true);
+        touch.surface.addEventListener('pointercancel', handleGestureEnd, true);
+      } else {
+        // Add Touch Listener
+        touch.surface.addEventListener('touchstart', handleGestureStart, true);
+        touch.surface.addEventListener('touchmove', handleGestureMove, true);
+        touch.surface.addEventListener('touchend', handleGestureEnd, true);
+        touch.surface.addEventListener('touchcancel', handleGestureEnd, true);
+
+        // Add Mouse Listener
+        touch.surface.addEventListener('mousedown', handleGestureStart, true);
+      }
+    }
+
+    function handleGestureStart(evt){
+      evt.preventDefault();
+      // ignore if we have multiple touches simultaneously
+      if(evt.touches && evt.touches.length > 1) {
+        return;
+      }
+
+      // Add the move and end listeners
+      if (window.PointerEvent) {
+        evt.target.setPointerCapture(evt.pointerId);
+      } else {
+        // Add Mouse Listeners
+        document.addEventListener('mousemove', handleGestureMove, true);
+        document.addEventListener('mouseup', handleGestureEnd, true);
+      }
+
+      
+    };
+
+    function handleGestureMove(evt){
+      evt.preventDefault(); // prevent scrolling when inside el
+
+      if(!touch.initialTouchPos) { // ignore if initialTouchPos was not captured
+        return;
+      }
+
+      touch.lastTouchPos = getGesturePointFromEvent(evt); // get lastTouchPos
+
+      // redraw screen on gesture end
+      if(touch.rafPending) { // dont request another redraw if were still waiting for last redraw
+        return;
+      }
+
+      touch.rafPending = true; // flag the redraw we are about to request
+      // window.requestAnimationFrame(onAnimFrame); // call function with redraw details when anim frame is ready
+    }
+
+    function handleGestureEnd(evt){
+      evt.preventDefault();
+
+      if(evt.touches && evt.touches.length > 0) { // ignore if we still have active touches
+        return;
+      }
+
+      touch.rafPending = false; // no longer requesting redraws from this touch
+
+      // determine validity of gesture/swipe based on dir, time and distance
+      touch.distX = touch.lastTouchPos.x - touch.initialTouchPos.x // get horizontal swipe dist
+      touch.distY = touch.lastTouchPos.y - touch.initialTouchPos.y // get vertical swipe dist
+      touch.elapsedTime = new Date().getTime() - touch.startTime // get time elapsed
+      if (touch.elapsedTime <= touch.allowedTime) { // first condition for awipe met
+        if (Math.abs(touch.distX) >= touch.threshold && Math.abs(touch.distY) <= touch.restraint) { // 2nd condition for horizontal swipe met
+          touch.swipedir = (touch.distX < 0) ? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+        } else if (Math.abs(touch.distY) >= touch.threshold && Math.abs(touch.distX) <= touch.restraint) { // 2nd condition for vertical swipe met
+          touch.swipedir = (touch.distY < 0) ? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+        }
+      }
+
+      // Remove Event Listeners
+      if (window.PointerEvent) {
+        evt.target.releasePointerCapture(evt.pointerId);
+      } else {
+        // Remove Mouse Listeners
+        document.removeEventListener('mousemove', handleGestureMove, true);
+        document.removeEventListener('mouseup', handleGestureEnd, true);
+      }
+
+      touch.handleswipe(touch.swipedir); // use the new info calculated above
+      showObject("handleGestureEnd", touch);
+    }
+
+    function getGesturePointFromEvent(evt) {
+      var point = {};
+
+      if(evt.targetTouches) {
+        // Prefer Touch Events
+        point.x = evt.targetTouches[0].clientX;
+        point.y = evt.targetTouches[0].clientY;
+      } else {
+        // Either Mouse event or Pointer Event
+        point.x = evt.clientX;
+        point.y = evt.clientY;
+      }
+
+      return point;
+    }
+
+    function animEndCallback(evt) {
+      // console.log("animEndCallback", evt);
+      // remove this callback from the element
+      evt.target.removeEventListener(touch.animEndEvent, animEndCallback);
+      // any additional action after this animation ends?
+      switch (evt.animationName) {
+        case 'fade-out':
+          evt.target.className = 'lab-hidden';
+          break;
+        default:
+          evt.target.className = '';
+          break;
+      }
+    }
+
+    function elementInCallback(evt) {
+      // console.log("element in", evt);
+      evt.target.removeEventListener(touch.animEndEvent, elementInCallback);
+      if (evt.animationName === 'fade-in') {
+        evt.target.className = 'stormDeviceScreen';
+      }else{
+        evt.target.className = 'stormStripe';
+      }
+    }
+
+    function elementOutCallback(evt) {
+      // use this to handle what happens after an element fades/slides out of view
+      // console.log("element out", evt);
+      evt.target.removeEventListener(touch.animEndEvent, elementOutCallback);
+      if (evt.animationName === 'fade-out') {
+        evt.target.className = 'stormDeviceScreen storm-hidden';
+      }else{
+        evt.target.className = 'stormStripe storm-hidden';
+      }
+      // remove intro slide if this is the first interaction
+      if (!slides.interact) {
+        //  remove first (intro) node from each collection
+        slides.aStripes[0].parentNode.removeChild(slides.aStripes[0]);
+        slides.aScreens[0].parentNode.removeChild(slides.aScreens[0]);
+        slides.interact = true; // flag interaction so this only happens once
+        // re-calculate collections after removing intro
+        slides.aStripes = document.querySelectorAll('#stormStripes .stormStripe');
+        slides.aScreens = document.querySelectorAll('.stormDeviceScreen');
+        // manually adjust currentSlide since we just removed an item
+        if (touch.swipedir === 'right') {
+          slides.currentSlide = 2;
+        }else{
+          slides.currentSlide = 0;
+        }
+      }
+    }
+*/
+    function getAnimationEndEventName(){
+      // Function from David Walsh: http://davidwalsh.name/css-animation-callback
+      var t,
+          el = document.createElement("fakeelement");
+
+      var transitions = {
+          "animation"      : "animationend",
+          "OAnimation"     : "oAnimationEnd",
+          "MozAnimation"   : "animationend",
+          "WebkitAnimation": "webkitAnimationEnd"
+      }
+
+      for (t in transitions){
+          if (el.style[t] !== undefined){
+              return transitions[t];
+          }
+      }
+    }
+
+    function showObject(sTitle, oData){
+      var feedback = document.getElementById('feedback');
+      feedback.innerHTML = "<p>"+sTitle+"</p><pre>"+JSON.stringify(oData, null, 2)+"</pre>";
+    }
+
+    window.addEventListener('load', init, false);
+  </script>
+</body>
+
+</html>

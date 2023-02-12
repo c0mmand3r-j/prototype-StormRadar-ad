@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<title>Storm Tap/Hold Gallery Demo - DFP</title>
+    
+    
+    
+	<style type="text/css" id="labCSS" rel="stylesheet">
+		#labBtnClose {
+			position: absolute;
+			right: 3px;
+			top: 3px;
+			width: 21px;
+			height: auto;
+			z-index: 5 !important;
+			cursor: pointer;
+		}
+        
+        
+        
+        
+        
+        /* EXPAND BUTTON */
+      
+        .button{
+  display:inline-block;
+  font-size: 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 500;
+  letter-spacing: 1px;
+  overflow:hidden;
+  position: relative;
+  z-index:1;
+  margin:1rem;
+}
+      
+.expbutton{
+  background: rgba(80,80,80, .7);
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+}
+      
+
+.button-thick{
+  padding: 3px 18px; /* TOP/BOTTOM, RIGHT/LEFT */
+}
+
+/* Expand Button, COLLAPSE Button Arrows */
+.downarrow {
+    position: relative;
+    font-size: 8px;
+    bottom: 1px;
+    padding: 4px;
+} 
+      
+/* EXPAND BUTTON */  
+        
+        
+	    #labBtnExpand {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			width: 125px;
+			z-index: 5 !important;
+			cursor: pointer;
+			background-color: rgba(0, 0, 0, 0.65);
+		} 
+        
+		#labBtnRotate {
+	      left: 0;
+	      right: 0;
+	      bottom: 0;
+	      width: 170px;
+	      z-index: 5;
+	      cursor: pointer;
+	      background-color: rgba(0, 0, 0, 0.65);
+	    }
+		#mobileWeb_labContent,
+		#mobileWeb_labContentLandscape {
+			display: block;
+			position: relative;
+			z-index: 1;
+			/* margin: -5px auto 0 auto; */
+			overflow: hidden;
+			/* background-image: url("https://s.w-x.co/ads/creatives/dev/stormradar/bg.jpg"); */
+			background-position: 50% 0;
+			background-repeat: no-repeat;
+		}
+		#labContentOpen {
+			position: relative;
+			height: 304px;
+			margin: 0 auto;
+			max-width: 414px;
+			overflow: hidden;
+		}
+		#labContentClosed {
+			position: relative;
+			height: 95px;
+			margin: 0 auto;
+			max-width: 414px;
+			overflow: hidden;
+		}
+
+		#labContentOpen div,
+		#labContentOpen img,
+		#labContentClosed div,
+		#labContentClosed img,
+		#mobileWeb_labContentLandscape div,
+		#mobileWeb_labContentLandscape img {
+			position: absolute;
+			height: auto;
+			margin: auto;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		/* STORM SWIPER CSS */
+		#labContentSurface{
+	      position: absolute;
+	      width: 100%;
+	      height: 100%;
+	      cursor: pointer;
+	      z-index: 3;
+	    }
+		
+
+	    .stormDeviceScreen{
+	      width: 100vw;
+	      max-width: 414px;
+	      z-index: 1;
+	      animation-duration: .5s;
+	      animation-timing-function: ease-out;
+	    }
+	    .stormStripe{
+	      width: 100vw;
+	      max-width: 414px;
+	      animation-duration: .5s;
+	    }
+	    .storm-hidden{opacity: 0;}
+	    .adOpen{
+	      animation-name: adOpen-anim;
+	      animation-duration: 1.0s;
+	      animation-timing-function: ease-out;
+	      animation-fill-mode: forwards;
+	    }
+	    .adOpenInit{
+	      animation-name: adOpen-init;
+	      animation-duration: 1.0s;
+	      animation-timing-function: ease-out;
+	      animation-fill-mode: forwards;
+	    }
+	    .adClose{
+	      animation-name: adClose-anim;
+	      animation-duration: .5s;
+	      animation-timing-function: ease-in;
+	      animation-fill-mode: forwards;
+	    }
+		.adCloseInit{
+	      animation-name: adClose-init;
+	      animation-duration: 1.0s;
+	      animation-timing-function: ease-out;
+	      animation-fill-mode: forwards;
+	    }
+	    .contentOpen{
+	      animation-name: fade-in;
+	      animation-duration: .45s;
+	      animation-timing-function: ease-out;
+	      animation-fill-mode: forwards;
+	    }
+	    .contentClose{
+	      animation-name: fade-out;
+	      animation-duration: .5s;
+	      animation-timing-function: ease-out;
+	      animation-fill-mode: forwards;
+	    }
+	    .screen-in{animation-name: fade-in;}
+	    .screen-out{animation-name: fade-out;}
+	    .stripe-right-in{animation-name: swipe-right-in;}
+	    .stripe-right-out{animation-name: swipe-right-out;}
+	    .stripe-left-in{animation-name: swipe-left-in;}
+	    .stripe-left-out{animation-name: swipe-left-out;}
+
+	    @keyframes adOpen-init {
+	      0%   {
+	          height: calc(100vw * (95/414));
+	          max-height: 95px;
+			  opacity: 0;
+	      }
+	      100% {
+	          height: calc(100vw * (304/414));
+	          max-height: 304px;
+			  opacity: 1;
+	      }
+	    }
+	    @keyframes adOpen-anim {
+	      0%   {
+	          height: calc(100vw * (95/414));
+	          max-height: 95px;
+	      }
+	      100% {
+	          height: calc(100vw * (304/414));
+	          max-height: 304px;
+	      }
+	    }
+
+	    @keyframes adClose-init {
+	      0%   {
+	        height: calc(100vw * (304/414));
+	        max-height: 95px;
+			opacity: 0;
+	      }
+	      100% {
+	        height: calc(100vw * (95/414));
+	        max-height: 95px;
+			opacity: 1;
+	      }
+	    }
+	    @keyframes adClose-anim {
+	      0%   {
+	        height: calc(100vw * (304/414));
+	        max-height: 304px;
+	      }
+	      100% {
+	        height: calc(100vw * (95/414));
+	        max-height: 95px;
+	      }
+	    }
+
+	    @keyframes swipe-right-in {
+	      0%   {
+	          transform: translateX(-414px);
+	      }
+	      100% {
+	          transform: translateX(0px);
+	      }
+	    }
+
+	    @keyframes swipe-left-in {
+	      0%   {
+	          transform: translateX(414px);
+	      }
+	      100% {
+	          transform: translateX(0px);
+	      }
+	    }
+
+	    @keyframes swipe-right-out {
+	      0%   {
+	          transform: translateX(0px);
+	      }
+	      100% {
+	          transform: translateX(414px);
+	      }
+	    }
+	    @keyframes swipe-left-out {
+	      0%   {
+	          transform: translateX(0px);
+	      }
+	      100% {
+	          transform: translateX(-414px);
+	      }
+	    }
+	    @keyframes fade-out {
+	      0%   {
+	          opacity: 1;
+	      }
+	      100% {
+	          opacity: 0;
+	      }
+	    }
+	    @keyframes fade-in {
+	      0%   {
+	          opacity: .5;
+	      }
+	      100% {
+	          opacity: 1;
+	      }
+	    }
+
+		/* Adjust for viewports less than ad width */
+	    @media screen and (max-width: 413px) {
+	      #labContentOpen {
+	      	height: calc(100vw * (304/414));
+	      }
+	      #labContentClosed {
+	      	height: calc(100vw * (95/414));
+	      }
+	      #stormCTA{width:33vw; left: 5vw;}/* calculated width by btn-width/layout-width or 134/414 = .33 */
+
+	      @keyframes swipe-right-in {
+	        0%   {
+	            transform: translateX(-100vw);
+	        }
+	        100% {
+	            transform: translateX(0px);
+	        }
+	      }
+
+	      @keyframes swipe-left-in {
+	        0%   {
+	            transform: translateX(100vw);
+	        }
+	        100% {
+	            transform: translateX(0px);
+	        }
+	      }
+
+	      @keyframes swipe-right-out {
+	        0%   {
+	            transform: translateX(0px);
+	        }
+	        100% {
+	            transform: translateX(100vw);
+	        }
+	      }
+	      @keyframes swipe-left-out {
+	        0%   {
+	            transform: translateX(0px);
+	        }
+	        100% {
+	            transform: translateX(-100vw);
+	        }
+	      }
+	    }
+
+		/* handle orientation changes */
+		/* Portrait */
+		@media screen and (orientation: portrait) {
+			#mobileWeb_labContent {
+				display: block;
+			}
+
+			#mobileWeb_labContentLandscape {
+				display: none;
+			}
+		}
+
+		/* Landscape */
+		@media screen and (orientation: landscape) {
+			#mobileWeb_labContent,
+			#labBtnExpand {
+				display: none;
+			}
+
+			#mobileWeb_labContentLandscape {
+				display: block;
+				opacity: 1;
+				height: 95px;
+				background-color: #333;
+			}
+		}
+
+		/* apply dark background-color for widths wider than ad */
+		@media screen and (min-width: 414px) {
+			#mobileWeb_labContent {
+				background-color: #333;
+			}
+		}
+		/* hide for all sizes above 767px */
+		@media screen and (min-width: 768px) {
+			#labBG,
+			#mobileWeb_labContent,
+			#mobileWeb_labContentLandscape {
+				display: none;
+			}
+		}
+
+		/* @media screen and (max-width: 375px) {}
+
+		@media screen and (max-width: 360px) {}
+
+		@media screen and (max-width: 320px) {} */
+
+		.lab-trans {
+			-webkit-transition: all .25s ease-out;
+			-moz-transition: all .25s ease-out;
+			-ms-transition: all .25s ease-out;
+			transition: all .25s ease-out;
+		}
+		.lab-hidden{display: none;}
+		.lab-loading{height: 0px;}
+		.lab-center {
+			top: 0px;
+			left: 0px;
+			margin: auto !important;
+		}
+        
+        
+        
+/* TAP-HOLD STYLE  */      
+#phonedevice{
+    position: absolute;  
+    max-width: 414px;
+   -webkit-transition: all 1.5s ease;
+    -moz-transition: all 1.5s ease;
+    -o-transition: all 1.5s ease;
+    transition: all 1.5s ease;
+}
+
+#tapholdtxt{
+    position: absolute;
+    max-width: 414px;
+    -webkit-transition: all 1.5s ease;
+    -moz-transition: all 1.5s ease;
+    -o-transition: all 1.5s ease;
+    transition: all 1.5s ease;
+}
+
+
+#lockup{
+    position: absolute;
+    max-width: 414px;
+}
+
+#tapzone {
+  position: absolute;
+    max-width: 414px;
+   
+}
+
+#reveal {
+  position: absolute;
+  max-width: 414px;
+    z-index: -1;
+}
+
+
+
+/* HAND ANIMATIONN*/
+        
+svg {
+	display: inline-block;
+	width: 90px;
+	margin: 0 auto;
+ /* background-color: rgba(255,255,255,0.3);*/
+  position: relative;
+  transform: translate(-50%);
+  left: 50%;
+    top: 100px;
+}
+        
+        .hand_animation{
+            left: 280px;
+            top: 70px;
+           
+        }
+
+.hand {
+	fill: rgba(255,255,255,1);
+	stroke: #000;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+  animation: tap 2s ease-out backwards;
+	animation-iteration-count:infinite;
+}
+
+.tap-1 {
+	fill: rgba(255,255,255,0.8);
+	stroke: #000;
+	stroke-width: 3px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+    opacity: .1;
+    animation: tap1 2s ease-out backwards;
+	animation-iteration-count:infinite;  
+}
+
+@keyframes tap1 {
+	0% {
+		opacity: .1;
+	}
+	20% {
+		opacity: 1;
+	}
+	40% {
+		opacity: .1;
+	}
+}
+
+@keyframes tap {
+	0% {
+		transform: rotateX(0deg);
+	}
+	20% {
+		transform: rotateX(25deg);
+	}
+	40% {
+		transform: rotateX(0deg);
+	}
+}      
+
+/* HAND ANIMATIONN */
+       
+      
+/* TAP-HOLD STYLE  */ 
+        
+
+        
+        
+        
+	</style>
+	<script src='https://s.w-x.co/ads/creatives/jquery/promises.js'></script>
+    
+  
+
+</head>
+
+<body>
+
+	<div id="main" style="display:none;">
+		<!--TRACKING-->
+		<div id="labTracking" style="display:none;">
+			<!-- Line Item %eaid! ==  Creative ID %ecid! -->
+			<!-- Impression Pixel -->
+			<!-- <img src="" alt="impression tracking pixel"> -->
+		</div>
+
+		<!--BG-->
+		<div id="mobileWeb_labBG"></div>
+
+		<!--CONTENT-->
+		<div id="mobileWeb_labContent">
+			
+			
+            <!--Touch Surface-->
+			<div id="labContentSurface"></div>
+            <!-- OPEN STATE -->
+			<div id="labContentOpen" class="lab-hidden">
+		        <img id="labBtnClose" draggable="false">
+              
+                
+                <!-- The Static Load -->
+                <div id="tapzone">
+                  
+                <img id="phonedevice" draggable="false">
+                <!--<img id="tapholdtxt" draggable="false">-->
+                    
+                <div class="hand_animation">   
+                <svg viewBox="0 0 200 200">    
+                <circle class="tap-1" cx="89.43" cy="49.55" r="30"/>
+                <path class="hand" d="M139.93,107.76l-41.12-6.93V70.28A9.25,9.25,0,0,0,89.56,61h0a9.25,9.25,0,0,0-9.25,9.25v57.36L71,116.85c-3.61-3.61-8.44-3.89-13.08,0,0,0-7.24,5.84-3.83,9.25l34,34h42.63a9.25,9.25,0,0,0,9.07-7.43l6.82-34.09A9.28,9.28,0,0,0,139.93,107.76Z"/>
+                </svg>    
+                </div>     
+                    
+                    
+                <img id="lockup" draggable="false"> 
+                </div>  
+                
+                
+                <!-- The Reveal Load -->
+                <div id="reveal">
+                <img id="lockup" draggable="false"> 
+                <video id="stormvideo" width="414" height="304" loop muted playsinline>
+                <source src="https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/bg_loop.mp4" type="video/mp4">
+                </video>    
+                </div>
+                
+                
+		      </div>
+            <!-- OPEN STATE -->
+            
+            
+            <!-- CLOSED STATE -->
+		      <div id="labContentClosed" class="lab-hidden">
+		        <div id="labBtnExpand" class="button expbutton button-thick lab-trans"><span class ="downarrow">▼</span> Expand <span class ="downarrow">▼</span></div>  
+                <img id="stormClosedContent" alt="Storm Radar App with 20 Advanced Map Layers" draggable="false">
+		      </div>
+            <!-- CLOSED STATE -->
+            
+            
+		</div>
+		<div id="mobileWeb_labContentLandscape">
+			<img src="" id="stormLandscapeContent" class="lab-trans">
+			<img src="" id="labBtnRotate" class="lab-trans">
+		</div>
+		<!--CONTENT END-->
+	</div>
+
+	<!--DEFAULT-->
+	<div id="labDefault" style='display:none;'></div>
+
+	<script type="text/javascript">
+        
+        console.log(":::: 3:04pm DFP Upload ::::  05042018");
+        
+		var lA = {};
+		var lC = {
+			adaptor: {
+				on: false,
+				cond: "" // possible - cond: clear, cloudy, rain, wintry
+			},
+			adType: "MW BBG",
+			name: "stormradarLoveRadar",
+			alt: "SR Love Radar MobileWeb BB",
+			dir: "https://s.w-x.co/ads/creatives/prototype/stormradar/loveradar/",
+			initialDisplay: true,
+			els: {
+				content: {
+					id: "mobileWeb_labContent",
+					imgProps: {
+						type: "bg",
+						css: ""
+					},
+					img: {
+						small: "p1.jpg"
+					}
+				},
+				
+                
+                contentTouchSurface: {
+					id: "labContentSurface"
+				},
+                
+                
+				contentOpen: {
+					id: "labContentOpen"
+				},
+				contentClosed: {
+					id: "labContentClosed"
+				},
+				contentLandscape: {
+					id: "mobileWeb_labContentLandscape"
+				},
+                
+                //CONTENT IN OPEN STATE //
+			
+				
+				phonedevice: {
+					id: "phonedevice",
+					img: {
+						small: "p4.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                
+                /*
+                tapholdtxt: {
+					id: "tapholdtxt",
+					img: {
+						small: "p2.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                */
+                
+                lockuptext: {
+					id: "lockup",
+					img: {
+						small: "lockup.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                
+                
+               
+                
+			
+                //CONTENT IN OPEN STATE //
+                
+                
+                //CONTENT IN CLOSED STATE //
+				stormClosedContent: {
+					id: "stormClosedContent",
+					click:exitClick,
+					img: {
+						small: "closed.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                
+                //CONTENT IN OPEN STATE //
+				stormLandscapeContent: {
+					id: "stormLandscapeContent",
+					click:exitClick,
+					img: {
+						small: "closed.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                
+				btnRotate: {
+					id: "labBtnRotate",
+					img: {
+						small: "https://s.w-x.co/ads/creatives/dev/stormradar/rotateBtn.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+				btnClose: {
+					id: "labBtnClose",
+					click: toggleState,
+					img: {
+						small: "https://s.w-x.co/ads/creatives/bwbb/btn_close_thick_red.png"
+					},
+					imgProps: {
+						type: "img",
+						css: ""
+					}
+				},
+                
+                btnExpand: {
+					id: "labBtnExpand",
+					click: toggleState,
+					
+					imgProps: {
+						css: ""
+					}
+				}
+				
+			},
+			logs: [],
+			imgs: {
+				loadCount: 0,
+				loadTimer: 0,
+				maxLoadTime: 3000,
+				map: [],
+				loaded: [],
+				toLoad: []
+			},
+			page: { // init
+				aspectRatio: 0,
+				clientHeight: 0,
+				clientWidth: 0,
+				contentWidth: 0,
+				divId: "",
+				dpr: window.devicePixelRatio, // init
+				iframeId: "",
+				scrollTop: 0
+			},
+			errors: [],
+			events: [],
+			ids: {
+				creative: "%ecid!",
+				lineItem: "%eaid!",
+				loc: "%%PATTERN:zip%%",
+				pos: "%%PATTERN:pos%%"
+			},
+			scope: "", // init
+			seenToday: false,
+			size: "small",
+			state: "closed",
+			test: {
+				on: false,
+				state: ""
+			},
+			time: {},
+			timer: {
+				close: 0,
+				resize: 0,
+				scroll: 0,
+				start: 0
+			},
+			tracking: {
+				a: "", // base analytics url for twc tracking
+				i: [], // imp pixels objs - {'url':'', 'label':''}
+				c: {
+					dfpClick: "%%CLICK_URL_UNESC%%",
+					pixelTracking: "",
+					clickTag: ""
+				}
+			}
+		};
+
+		var cl = (function() {
+
+			/*CHANGED*/
+			addJson();
+			addJquery();
+			/*END CHANGED*/
+
+			return {
+				log: function() {
+					var args = Array.prototype.slice.call(arguments);
+					// push log info to lC and update parent
+					lC.logs.push(args);
+					// add to parent DOM as 'labInfo.' + lC.name + lC.time.loaded
+					logInfo(lC.name + lC.time.loaded, lC);
+				},
+				warn: function() {
+					var args = Array.prototype.slice.call(arguments);
+					console.warn.apply(console, args);
+				},
+				error: function() {
+					var args = Array.prototype.slice.call(arguments);
+					console.error.apply(console, args);
+				}
+			}
+		}());
+        
+       // var myvid = parent.document.querySelector('#stormvideo');
+       // myvid.pause();
+
+		/*CORE*/
+		function initAd() {
+			try {
+				// lC inits
+				if (window.top != window.self) {
+					lC.scope = parent.window;
+				} else {
+					lC.scope = window;
+				}
+				// capture date & time
+				lC.time.date = new Date();
+				lC.time.loaded = lC.time.date.getTime();
+				lC.time.day = lC.time.date.getDay();
+				lC.time.dateStr = lC.time.date.toDateString();
+
+				// capture browser-specific CSS animation end event name for callback usage
+				lC.animEndEvent = getAnimationEndEventName();
+
+				// frequency cap test
+				lC.seenToday = freqCheck();
+				// should it be open or closed?
+				if (lC.seenToday) {
+					lC.state = "closed";
+				} else {
+					lC.state = "open";
+				}
+
+                // TODO: remove this test setting to force ad to open on load
+				// lC.state = "open";
+				lC.adaptor.dayNight = getDayOrNight();
+
+				// handle adaptor & test b/c those can impact everything that
+				// happens in the rest of the code.
+				if (lC.adaptor.on == true) {
+					// in this case we just need a cond
+					lC.adaptor.cond = initAdaptor();
+					cl.log("Adaptor on", lC.adaptor);
+				}
+
+				// check to see if ad should be in test mode
+				lC.test.on = hashTestCheck();
+
+				// get all pertinent info from parent page - lC.size is set
+				getParentInfo();
+
+				// find correct imgs based on size and cond
+				var uniqueImgs = imgSelection();
+
+				// load imgs
+				imgPreload(uniqueImgs); // calls buildAd when complete
+
+				// attach key els to parent
+				addToParent();
+			} catch (err) {
+				logError(err, true);
+				console.log("Ad Initiating Error!");
+			}
+		}
+
+		function initAdaptor() {
+			try { // possible - cond: clear, cloudy, rain, wintry
+				lC.adaptor.sCond = ""; // string to return
+				// get icon from observation
+				lC.adaptor.icon = parent.TWC.adUtils.data.observation.data.vt1observation.icon;
+
+				lC.adaptor.adCond = getAdCond(lC.adaptor.icon); // returns an obj. b = bucket.
+				cl.log("initAdaptor",lC.adaptor);
+				// sort based on bucket returned
+				switch (lC.adaptor.adCond.b) {
+					case "Sunny":
+					case "Clear":
+						lC.adaptor.sCond = "clear";
+						break;
+					case "Wintry":
+						lC.adaptor.sCond = "wintry";
+						break;
+					case "Cloudy":
+						lC.adaptor.sCond = "cloudy";
+						break;
+					case "Rain":
+					case "Rainy":
+					case "Stormy":
+						lC.adaptor.sCond = "rainy";
+						break;
+					default:
+						lC.adaptor.sCond = "cloudy";
+						break;
+				}
+
+				lC.adaptor.dayNight = getDayOrNight();
+
+				// if it's night, then add night to the cond name
+				if (lC.adaptor.dayNight == "night") {
+					lC.adaptor.sCond += "night";
+				}
+				return lC.adaptor.sCond;
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function addToParent() {
+			try {
+				// hide smart banner
+				jq("#smartbanner").css("display", "none");
+				jq('.region.region-top').css('display', 'none');
+
+				// BG & CSS
+				var css = document.getElementById("labCSS").cloneNode(true);
+				jq("head").append(css);
+
+				// CONTENT
+				var bg = document.getElementById("mobileWeb_labBG").cloneNode(true);
+				var content = document.getElementById("mobileWeb_labContent").cloneNode(true);
+				var contentLandscape = document.getElementById("mobileWeb_labContentLandscape").cloneNode(true);
+
+				// add content structure to parent & remove top padding
+				jq("#wx-hero-content").prepend(contentLandscape);
+				jq("#wx-hero-content").prepend(content);
+				jq("#wx-hero-content").prepend(bg);
+				jq("#wx-hero-content").css('padding-top', 0);
+
+				// hide ad slot
+				jq(lC.page.divId).css("display", "none");
+
+				cl.log("addToParent success");
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function buildAd() {
+			try {
+				// build up the lA object with pertinent props from lC
+				lA.alt = lC.alt;
+				lA.dir = lC.dir;
+				lA.name = lC.name;
+				lA.size = lC.size;
+				lA.state = lC.state;
+				lA.cond = lC.adaptor.cond;
+				lA.e = {};
+				// loop through lC.els and hook things up
+				for (var prop in lC.els) {
+					var el = lC.els[prop];
+					// add each prop to labAd with jq ref
+					lA.e[prop] = jq("#" + el.id);
+					// add click handler if it has one
+					if (el.hasOwnProperty('click')) {
+						lA.e[prop].click(el.click);
+					}
+					// add click handler if it has one
+					if (el.hasOwnProperty('className')) {
+						lA.e[prop].addClass(lC.adaptor.cond);
+					}
+				}
+
+				// apply imgs based on size
+				setImgs(lA.size);
+
+				// apply throttled resize
+				parent.window.addEventListener("resize", monitorResize);
+
+				cl.log("buildAd success. labAd object ready", lA);
+
+				// init swiper once everything is on the parent document
+				//adOpen();
+                tapholdInit();
+                
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function adOpen() {
+			try {
+                //introToDevice();
+				// set animation classes
+				var labContentDiv = parent.document.getElementById('mobileWeb_labContent');
+				var labContentOpenDiv = parent.document.getElementById('labContentOpen');
+				var labContentClosedDiv = parent.document.getElementById('labContentClosed');
+				var labContentSurfaceDiv = parent.document.getElementById('labContentSurface');
+				if (lC.initialDisplay) {
+					labContentDiv.className = 'adOpenInit';
+					lC.initialDisplay = false;
+				} else {
+					labContentDiv.className = 'adOpen';
+				}
+				labContentOpenDiv.className = 'contentOpen';
+				labContentClosedDiv.className = 'contentClose';
+				// listeners to remove anim classes
+				labContentOpenDiv.addEventListener(lC.animEndEvent, animEndCallback);
+				labContentClosedDiv.addEventListener(lC.animEndEvent, animEndCallback);
+				// reveal touch surface when open
+				labContentSurfaceDiv.style.display = 'block';
+				// listen for scroll change to close ad
+				parent.window.addEventListener("scroll", monitorScroll, false);
+                // log event with timestamp
+				cl.log('adOpen - ' + new Date().getTime());
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function adClose() {
+			try {
+				// remove scroll handler
+				parent.window.removeEventListener("scroll", monitorScroll, false);
+				// set animation classes
+				var labContentDiv = parent.document.getElementById('mobileWeb_labContent');
+				var labContentOpenDiv = parent.document.getElementById('labContentOpen');
+				var labContentClosedDiv = parent.document.getElementById('labContentClosed');
+				var labContentSurfaceDiv = parent.document.getElementById('labContentSurface');
+				if (lC.initialDisplay) {
+					labContentDiv.className = 'adCloseInit';
+					lC.initialDisplay = false;
+				} else {
+					labContentDiv.className = 'adClose';
+				}
+				labContentOpenDiv.className = 'contentClose';
+				labContentClosedDiv.className = 'contentOpen';
+				// listeners to remove anim classes
+				labContentOpenDiv.addEventListener(lC.animEndEvent, animEndCallback);
+				labContentClosedDiv.addEventListener(lC.animEndEvent, animEndCallback);
+				// hide touch surface when closed
+				labContentSurfaceDiv.style.display = 'none';
+				// log event with timestamp
+				cl.log('adClose - ' + new Date().getTime());
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function setImgs(size) {
+			try {
+				// loop through lC.imgs.map and assign based on imgType
+				// map always has all img sizes - not just preloaded ones
+				var i, o;
+				var map = lC.imgs.map;
+				var len = map.length;
+				for (i = 0; i < len; i++) {
+					o = map[i];
+					if (o.type == "bg") {
+						lA.e[o.prop].css({
+							"background-image": "url('" + lA.dir + o[size] + "')"
+						});
+					} else if (o.type == "img") {
+						if (o[size].indexOf("://") == -1) {
+							lA.e[o.prop].attr("src", lA.dir + o[size]);
+						} else {
+							lA.e[o.prop].attr("src", o[size]);
+						}
+					} else {
+						cl.log("setImgs - type: unknown");
+					}
+				}
+				cl.log('setImgs success');
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function showDefault(reason) {
+			try {
+				lC.defaultReason = reason;
+				lA.name = lC.name;
+				lA.alt = lC.alt;
+				lA.dir = lC.dir;
+
+				// not showing default for initial bbgs
+				cl.log("Default ad triggered. Check lC.reason and lC.errors", reason);
+                // hide parent elements in case anything made it to parent before failure
+				var labContentDiv = parent.document.getElementById('mobileWeb_labContent');
+				labContentDiv.style.display = 'none';
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		function toggleState() { // toggles between open & closed
+			try {
+				if (lC.state == "open") {
+					lC.state = lA.state = "closed";
+					adClose();
+				} else {
+					lC.state = lA.state = "open";
+					adOpen();
+				}
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		/*UTILITY FUNCTIONS*/
+		function debounce(func, wait, immediate) {
+			var timeout;
+			return function() {
+				var context = this,
+					args = arguments;
+				var later = function() {
+					timeout = null;
+					if (!immediate) func.apply(context, args);
+				};
+				var callNow = immediate && !timeout;
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+				if (callNow) func.apply(context, args);
+			};
+		}
+
+		function exitClick(event) {
+			try {
+				event.preventDefault();
+				var id = event.target.id;
+				var url = lC.tracking.c.clickTag;
+				var target = "_blank";
+				cl.log('exitClick from: ' + id, url);
+				window.open(lC.tracking.c.dfpClick + url, target);
+				//track it
+				//lA.fns.trackingFx("click", "exitClick_" + id);
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		/*jStorage start*/
+		function freqCheck() {
+			try {
+				// check freq cap from jStorage - will return an array if found. Otherwise returns none.
+				var allLabAds = parent.jQuery.jStorage.get("aLabAds", "none");
+				var ad = {
+					name: lC.name,
+					viewDate: lC.time.dateStr,
+					count: 1
+				}; // create a new object to store in aLabAds
+				var seenToday = false;
+				if (allLabAds == "none") {
+					// create new array for storing lC objects in jStorage
+					var aLabAds = [];
+					aLabAds.push(ad);
+					cl.log("jStorage adding ", ad);
+					// store in jStorage
+					freqUpdate(aLabAds);
+					return seenToday;
+				} else {
+					// loop through aLabAds looking for match
+					var len = allLabAds.length;
+					for (var i = 0; i < len; i++) {
+						if (allLabAds[i].viewDate == lC.time.dateStr && allLabAds[i].name == lC.name) {
+							seenToday = true;
+							allLabAds[i].count++; // increment count if weve already seen this one
+							cl.log("jStorage updating ", allLabAds[i]);
+							freqUpdate(allLabAds);
+						}
+					}
+					// if not seenToday, add this new one to jStorage
+					if (!seenToday) {
+						allLabAds.push(ad);
+						cl.log("jStorage new today ", ad);
+						freqUpdate(allLabAds);
+					}
+					return seenToday;
+				}
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function freqUpdate(aAds) {
+			try {
+				parent.jQuery.jStorage.set("aLabAds", aAds); // scope
+				parent.jQuery.jStorage.setTTL("aLabAds", 30 * 24 * 60 * 60 * 1000); // scope
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+		/*jStorage end*/
+
+		function getAdCond(wxIcon) {
+			var adCond;
+			switch (String(wxIcon)) { // convert icon to string
+				case "0":
+					adCond = {
+						i: "0",
+						b: "Stormy",
+						d: "Tornado",
+						t: "na"
+					};
+					break;
+				case "1":
+					adCond = {
+						i: "1",
+						b: "Stormy",
+						d: "Tropical Storm",
+						t: "na"
+					};
+					break;
+				case "2":
+					adCond = {
+						i: "2",
+						b: "Stormy",
+						d: "Hurricane",
+						t: "na"
+					};
+					break;
+				case "3":
+					adCond = {
+						i: "3",
+						b: "Stormy",
+						d: "Strong Thunderstorms",
+						t: "na"
+					};
+					break;
+				case "4":
+					adCond = {
+						i: "4",
+						b: "Stormy",
+						d: "Thunderstorms",
+						t: "na"
+					};
+					break;
+				case "5":
+					adCond = {
+						i: "5",
+						b: "Wintry",
+						d: "Rain and Snow",
+						t: "na"
+					};
+					break;
+				case "6":
+					adCond = {
+						i: "6",
+						b: "Wintry",
+						d: "Rain and Sleet",
+						t: "na"
+					};
+					break;
+				case "7":
+					adCond = {
+						i: "7",
+						b: "Wintry",
+						d: "Wintry Mix",
+						t: "na"
+					};
+					break;
+				case "8":
+					adCond = {
+						i: "8",
+						b: "Wintry",
+						d: "Freezing Drizzle",
+						t: "na"
+					};
+					break;
+				case "9":
+					adCond = {
+						i: "9",
+						b: "Rainy",
+						d: "Drizzle",
+						t: "na"
+					};
+					break;
+				case "10":
+					adCond = {
+						i: "10",
+						b: "Rainy",
+						d: "Freezing Rain",
+						t: "na"
+					};
+					break;
+				case "11":
+					adCond = {
+						i: "11",
+						b: "Rainy",
+						d: "Showers",
+						t: "na"
+					};
+					break;
+				case "12":
+					adCond = {
+						i: "12",
+						b: "Rainy",
+						d: "Rain",
+						t: "na"
+					};
+					break;
+				case "13":
+					adCond = {
+						i: "13",
+						b: "Wintry",
+						d: "Flurries",
+						t: "na"
+					};
+					break;
+				case "14":
+					adCond = {
+						i: "14",
+						b: "Wintry",
+						d: "Snow Showers",
+						t: "na"
+					};
+					break;
+				case "15":
+					adCond = {
+						i: "15",
+						b: "Wintry",
+						d: "Blowing Snow",
+						t: "na"
+					};
+					break;
+				case "16":
+					adCond = {
+						i: "16",
+						b: "Wintry",
+						d: "Snow",
+						t: "na"
+					};
+					break;
+				case "17":
+					adCond = {
+						i: "17",
+						b: "Wintry",
+						d: "Hail",
+						t: "na"
+					};
+					break;
+				case "18":
+					adCond = {
+						i: "18",
+						b: "Wintry",
+						d: "Sleet",
+						t: "na"
+					};
+					break;
+				case "19":
+					adCond = {
+						i: "19",
+						b: "Low Visibility",
+						d: "Dust",
+						t: "na"
+					};
+					break;
+				case "20":
+					adCond = {
+						i: "20",
+						b: "Low Visibility",
+						d: "Fog",
+						t: "na"
+					};
+					break;
+				case "21":
+					adCond = {
+						i: "21",
+						b: "Low Visibility",
+						d: "Haze",
+						t: "na"
+					};
+					break;
+				case "22":
+					adCond = {
+						i: "22",
+						b: "Low Visibility",
+						d: "Smoke",
+						t: "na"
+					};
+					break;
+				case "23":
+					adCond = {
+						i: "23",
+						b: "Windy",
+						d: "Breezy",
+						t: "na"
+					};
+					break;
+				case "24":
+					adCond = {
+						i: "24",
+						b: "Windy",
+						d: "Windy",
+						t: "na"
+					};
+					break;
+				case "25":
+					adCond = {
+						i: "25",
+						b: "Windy",
+						d: "Frigid",
+						t: "na"
+					};
+					break;
+				case "26":
+					adCond = {
+						i: "26",
+						b: "Cloudy",
+						d: "Cloudy",
+						t: "na"
+					};
+					break;
+				case "27":
+					adCond = {
+						i: "27",
+						b: "Cloudy",
+						d: "Mostly Cloudy",
+						t: "night"
+					};
+					break;
+				case "28":
+					adCond = {
+						i: "28",
+						b: "Cloudy",
+						d: "Mostly Cloudy",
+						t: "day"
+					};
+					break;
+				case "29":
+					adCond = {
+						i: "29",
+						b: "Cloudy",
+						d: "Partly Cloudy",
+						t: "night"
+					};
+					break;
+				case "30":
+					adCond = {
+						i: "30",
+						b: "Cloudy",
+						d: "Partly Cloudy",
+						t: "day"
+					};
+					break;
+				case "31":
+					adCond = {
+						i: "31",
+						b: "Clear",
+						d: "Clear",
+						t: "night"
+					};
+					break;
+				case "32":
+					adCond = {
+						i: "32",
+						b: "Sunny",
+						d: "Sunny",
+						t: "day"
+					};
+					break;
+				case "33":
+					adCond = {
+						i: "33",
+						b: "Clear",
+						d: "Mostly Clear",
+						t: "night"
+					};
+					break;
+				case "34":
+					adCond = {
+						i: "34",
+						b: "Sunny",
+						d: "Mostly Sunny",
+						t: "day"
+					};
+					break;
+				case "35":
+					adCond = {
+						i: "35",
+						b: "Wintry",
+						d: "Mixed Rain/Hail",
+						t: "na"
+					};
+					break;
+				case "36":
+					adCond = {
+						i: "36",
+						b: "Sunny",
+						d: "Hot",
+						t: "day"
+					};
+					break;
+				case "37":
+					adCond = {
+						i: "37",
+						b: "Stormy",
+						d: "Isolated Thunderstorms",
+						t: "day"
+					};
+					break;
+				case "38":
+					adCond = {
+						i: "38",
+						b: "Stormy",
+						d: "Scattered Thunderstorms",
+						t: "day"
+					};
+					break;
+				case "39":
+					adCond = {
+						i: "39",
+						b: "Rainy",
+						d: "Scattered Showers",
+						t: "day"
+					};
+					break;
+				case "40":
+					adCond = {
+						i: "40",
+						b: "Rainy",
+						d: "Heavy Rain",
+						t: "na"
+					};
+					break;
+				case "41":
+					adCond = {
+						i: "41",
+						b: "Wintry",
+						d: "Scattered Snow Showers",
+						t: "na"
+					};
+					break;
+				case "42":
+					adCond = {
+						i: "42",
+						b: "Wintry",
+						d: "Heavy Snow",
+						t: "na"
+					};
+					break;
+				case "43":
+					adCond = {
+						i: "43",
+						b: "Wintry",
+						d: "Blizzard",
+						t: "na"
+					};
+					break;
+				case "44":
+					adCond = {
+						i: "44",
+						b: "Default",
+						d: "Not Available",
+						t: "na"
+					};
+					break;
+				case "45":
+					adCond = {
+						i: "45",
+						b: "Rainy",
+						d: "Scattered Showers",
+						t: "night"
+					};
+					break;
+				case "46":
+					adCond = {
+						i: "46",
+						b: "Wintry",
+						d: "Scattered Snow Showers",
+						t: "night"
+					};
+					break;
+				case "47":
+					adCond = {
+						i: "47",
+						b: "Stormy",
+						d: "Scattered Thunderstorms",
+						t: "night"
+					};
+					break;
+				default:
+					adCond = {
+						i: "na",
+						b: "Default",
+						d: "Not Available",
+						t: "na"
+					};
+					break;
+			}
+			return adCond;
+		}
+
+		function getDayOrNight() {
+			try {
+				var dayPart = "day";
+				// figure out day/night based on sunrise/sunset timestamps in vt1dailyForecast
+			    var setStr = parent.TWC.adUtils.data.dailyForecast.data.vt1dailyForecast[0].sunset;
+			    var riseStr = parent.TWC.adUtils.data.dailyForecast.data.vt1dailyForecast[0].sunrise;
+			    // remove the tz offset so we can create Date obj
+			    lC.adaptor.sunsetStr = setStr.substr(0, setStr.lastIndexOf('-'));
+			    lC.adaptor.sunriseStr = riseStr.substr(0, riseStr.lastIndexOf('-'));
+			    // create Date objects for comparison
+			    lC.adaptor.sunset = new Date(lC.adaptor.sunsetStr);
+			    lC.adaptor.sunrise = new Date(lC.adaptor.sunriseStr);
+
+			    lC.adaptor.now = new Date();
+				// if current time (now) is greater than sunset, it's night
+			    if((lC.adaptor.now >= lC.adaptor.sunrise) && (lC.adaptor.now <= lC.adaptor.sunset)){
+				    dayPart = "day";
+			    }else{
+				    dayPart = "night";
+			    }
+				return dayPart;
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		function getPageSizes() {
+			try { // return obj with width and size label
+				var w = {
+					width: jq(lC.scope).width(),
+					height: jq(lC.scope).height(),
+					label: ""
+				};
+				if (w.width >= 1025) {
+					w.label = "large";
+				} else if (w.width <= 1024 && w.width >= 768) {
+					w.label = "medium";
+				} else {
+					w.label = "small";
+				}
+				return w;
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		function getParentInfo() {
+			try {
+				// content width of wx card map module
+				lC.page.contentWidth = jq('.today_wxcard').width();
+				// from document.documentElement
+				var w = getPageSizes();
+				cl.log("getParentInfo -> getPageSizes", w);
+				lC.page.clientWidth = w.width;
+				lC.page.clientHeight = jq(parent.window).height();
+				lC.page.aspectRatio = lC.page.clientWidth / lC.page.clientHeight;
+				// name the size based on measurements
+				lC.size = w.label;
+				if (lC.size == "large" || lC.size == "medium") {
+					lC.page.divId = "#wrapper_WX_WindowShade";
+				} else {
+					lC.page.divId = "#wrapper_MW_Position1";
+				}
+				// get parent container height
+				lC.page.divIdHeight = jq(lC.page.divId).height();
+				// capture iframe id
+				lC.page.iframeId = jq(lC.page.divId + " iframe").attr("id");
+
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function hashTestCheck() {
+		try {
+			// check top level location.hash for #adstest
+			lC.test.hash = top.window.location.hash.substring(1);
+			// expected format of hash value is #adstest-condition-state
+			lC.test.HashParts = lC.test.hash.split("-");
+			// if the zero index === adstest, we go into test mode
+			if (lC.test.HashParts[0] === "adstest") {
+				// override lC.adaptor.cond & lC.state & empty dfpClick macro
+				lC.adaptor.cond = lC.test.HashParts[1];
+				lC.state = lC.test.HashParts[2];
+				lC.tracking.c.dfpClick = "";
+				cl.log("BBG in test mode!", lC.test);
+				return true;
+			} else { // return false because we are not in test mode
+				return false;
+			}
+		}
+		catch (err) {
+			logError(err, false);
+			return false;
+		}
+	}
+
+		function imgPreload(aImgs) {
+			try {
+				var len = aImgs.length;
+				// loop through and load valid paths
+				for (var i = 0; i < len; i++) {
+					var imgObj = new Image();
+					if (aImgs[i].indexOf("://") == -1) {
+						// add dir when its only the img name
+						imgObj.src = lC.dir + aImgs[i];
+					} else {
+						// use full path
+						imgObj.src = aImgs[i];
+					}
+					imgObj.onload = imgLoaded;
+				}
+				// setTimeout for max allowable wait on loading
+				lC.imgs.loadTimer = window.setTimeout(function() {
+					// terminate any future callbacks
+					imgLoaded = null;
+					// show default msg
+					showDefault("imgPreload timed out after " + lC.imgs.maxLoadTime);
+				}, lC.imgs.maxLoadTime);
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function imgLoaded() {
+			try {
+				// increment count
+				lC.imgs.loadCount++;
+				lC.imgs.loaded.push(this);
+				if (lC.imgs.loadCount == lC.imgs.toLoad.length) {
+					clearInterval(lC.imgs.loadTimer);
+					cl.log("All images loaded", lC.imgs.toLoad);
+					buildAd();
+				}
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function imgSelection() {
+			try {
+				// iterate lC.els, call imgSelection for els with img prop
+				// stores uniques in lC.imgs.toLoad;
+				// also store a mapping obj to use in setImgs
+				var el, selected;
+				for (var prop in lC.els) {
+					el = lC.els[prop];
+					if (el.hasOwnProperty("img")) { // make sure we at least an img
+						// create map with all img props for use in setImgs
+						// map needs both sizes and duplicates
+						var mapObj = {
+							css: el.imgProps.css,
+							id: el.id,
+							prop: prop,
+							type: el.imgProps.type
+						};
+						// now check for cond property
+						if (el.hasOwnProperty(lC.adaptor.cond)) {
+							selected = el[lC.adaptor.cond][lC.size];
+							mapObj.small = el[lC.adaptor.cond]['small'];
+							mapObj.medium = el[lC.adaptor.cond]['medium'];
+							mapObj.large = el[lC.adaptor.cond]['large'];
+						} else { // else, use default img
+							selected = el['img'][lC.size];
+							mapObj.small = el['img']['small'];
+							mapObj.medium = el['img']['medium'];
+							mapObj.large = el['img']['large'];
+						}
+
+						lC.imgs.map.push(mapObj);
+						// check for existence in lC.imgs.toLoad
+						if (lC.imgs.toLoad.indexOf(selected) == -1) {
+							lC.imgs.toLoad.push(selected);
+						}
+					} else {
+						//prop has no images;
+					}
+				}
+				return lC.imgs.toLoad;
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function jq(selector) {
+			try {
+				if (window.top != window.self) { // use parent.jQuery if NOT top
+					if (!selector) {
+						return parent.jQuery;
+					} else {
+						return parent.jQuery(selector);
+					}
+				} else { // else use loaded jQuery if IS top
+					if (!selector) {
+						return parent.jQuery;
+					} else {
+						return parent.jQuery(selector);
+					}
+				}
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function logError(err, fatal) {
+			try {
+				cl.error(err, fatal);
+				lC.errors.push(err);
+				if (fatal) {
+					showDefault("lab fatal error! " + err.message);
+				}
+			} catch (err) {
+				cl.error(err, fatal, "error in logError fn");
+				lC.errors.push(err);
+				showDefault("lab fatal on logError");
+			}
+		}
+
+		function logInfo(sName, obj) {
+			try {
+				parent.labInfo = parent.labInfo || {};
+				parent.labInfo[sName] = obj;
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		function monitorResize() {
+			try {
+				// re-check screen size & compare to previous page size
+				// if label changed, load new imgs and set new css
+				var w = getPageSizes();
+				if (w.label != lC.size) {
+					cl.log("monitorResize: changed to", w.label);
+					lC.size = lA.size = w.label;
+					setImgs(w.label);
+				}
+			} catch (err) {
+				logError(err, false);
+			}
+		}
+
+		function monitorScroll() {
+			try {
+				if (parent.window.scrollY >= 60) {
+					// remove listener then toggleState
+					parent.window.removeEventListener("scroll", monitorScroll, false);
+					toggleState();
+				}
+			} catch (err) {
+				logError(err, true);
+			}
+		}
+
+		function throttle(callback, limit) {
+			var wait = false; // Initially, we're not waiting
+			return function() { // We return a throttled function
+				if (!wait) { // If we're not waiting
+					callback.call(); // Execute users function
+					wait = true; // Prevent future invocations
+					setTimeout(function() { // After a period of time
+						wait = false; // And allow future invocations
+					}, limit);
+				}
+			}
+		}
+
+		/*NERF ADDITIONS*/
+		function addJson() {
+
+
+
+			var insertBefore = window.top.document.getElementById('labBG');
+
+
+			if (!(document.getElementById('jsonFragmentScript'))) {
+
+				//this code adds json2 to the parent DOM just in case the creative needs it
+				var jsonFragment = document.createElement('script');
+				jsonFragment.id = 'jsonFragmentScript';
+				jsonFragment.src = 'https://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js';
+				parent.document.body.insertBefore(jsonFragment, insertBefore.childNodes[0]);
+			}
+
+		}
+
+		function addJquery() {
+
+
+
+			var promise = new Promise(function(resolve, reject) {
+
+				var insertBefore = window.top.document.getElementById('labBG');
+
+				//this code adds jquery to the parent DOM just in case the creative needs it
+				var fragment = document.createElement('script');
+				fragment.id = 'jQueryScript';
+				fragment.src = 'https://s.w-x.co/ads/creatives/jquery/finalgzippedversion/jqueryJstorageCombined.js';
+
+
+				if (window.top.jQuery) {
+					resolve(fragment);
+					return;
+				}
+
+
+				fragment.addEventListener('load', function() {
+					resolve(fragment);
+				}, false);
+
+				fragment.addEventListener('error', function() {
+					reject(fragment);
+					console.log('was rej');
+				}, false);
+
+
+				parent.document.body.insertBefore(fragment, insertBefore.childNodes[1]);
+
+			});
+
+			Promise.all([promise]).then(function() {
+				//console.log('jQuery', jQuery('body'));
+				//alert('jquery');
+				lC.timer.start = setTimeout(initAd, 50);
+			});
+		}
+		/*END NERF ADDITIONS*/
+
+        
+		
+        /*STORM SWIPER ADDITIONS*/
+ 
+        var touch = {
+	      tapholdel:'none',
+	      distX:0,
+	      distY:0,
+	      initialTouchPos:{x:0, y:0},
+	      lastTouchPos:{x:0, y:0},
+	      rect:{}, // getBoundingClientRect props
+	      threshold:8, // min required distance to qualify as a swipe
+	      restraint:100, // max allowable perpendicular sway
+	      allowedTime:500, // max swipe time
+	      elapsedTime:0,
+	      startTime:0,
+	      handleswipe:null
+	    }
+
+	   
+
+//TAP-HOLD FUNCTIONALITY //
+
+      
+function tapholdInit(){
+			try {
+                console.log(":::::tapholdInit::::::");
+				// define the touch surface
+				touch.surface = parent.document.getElementById('labContentSurface');
+				// capture size and placement of surface which covers entire ad in this case
+				touch.rect = touch.surface.getBoundingClientRect();
+				// capture browser-specific CSS animation end event name for callback usage
+				touch.animEndEvent = getAnimationEndEventName();
+                
+                
+                
+                //TOUCH START//
+                jq(touch.surface).on({'touchstart': function(){ 
+                   //event.preventDefault();
+                //    event.stopPropagation();
+                  //  event.stopImmediatePropagation();
+                     // NEW ////
+                   
+                   
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                    var handani = parent.document.querySelector('.hand_animation');
+                    
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                
+                  jq(phonedevicestatic).css("opacity", "0");
+                   jq(handani).css("opacity", "0"); 
+                    //// NEW ////
+                   // jq(taptext).addClass( "thefade" );
+                  //  jq(phonedevicestatic).addClass( "thefade" );
+                    
+                   
+                  //  jq(taptext).fadeOut( 900, "linear", complete );
+                    //jq(phonedevicestatic).fadeOut( 900, "linear", complete );
+                    
+                
+                    myvid.play();
+                    console.log(":::touchstart::::FADING:");
+                
+                } });
+                //TOUCH START//
+                
+                
+                
+                //pointerdown//
+                jq(touch.surface).on({'pointerdown': function(){ 
+                  // event.preventDefault();
+                    //event.stopPropagation();
+                    //event.stopImmediatePropagation();
+                    
+                   
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                     var handani = parent.document.querySelector('.hand_animation');
+                    
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                   
+                    jq(phonedevicestatic).css("opacity", "0");
+                    jq(handani).css("opacity", "0"); 
+                    
+                    myvid.play();
+                    
+                    
+                    console.log(":::pointerdown:::::");
+                
+                } });
+              //pointerdown//
+                
+                
+                
+                
+                //TOUCH END//
+                 jq(touch.surface).on({'touchend': function(){ 
+                   // event.preventDefault();
+                  //  event.stopPropagation();
+                   // event.stopImmediatePropagation();
+                  
+                    
+                   
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                     var handani = parent.document.querySelector('.hand_animation');
+                     
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                    jq(phonedevicestatic).css("opacity", "1.0");
+                    jq(handani).css("opacity", "1.0");  
+                     
+                    myvid.pause();
+                    console.log(":::touchend:::::");
+                
+                } });
+                //TOUCH END//
+                
+                
+                
+                //TOUCH CANCEL//
+                jq(touch.surface).on({'touchcancel': function(){ 
+                  // event.preventDefault();
+                    //event.stopPropagation();
+                    //event.stopImmediatePropagation();
+                    
+                   
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                    var handani = parent.document.querySelector('.hand_animation');
+                    
+                    
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                   
+                    jq(phonedevicestatic).css("opacity", "1.0");
+                    jq(handani).css("opacity", "1.0"); 
+                    
+                    myvid.pause();
+                    
+                    
+                    console.log(":::touchcancel:::::");
+                
+                } });
+              //TOUCH CANCEL//
+                
+                
+                
+                
+                 //pointerup//
+                jq(touch.surface).on({'pointerup': function(){ 
+                  // event.preventDefault();
+                    //event.stopPropagation();
+                    //event.stopImmediatePropagation();
+                    
+                    
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                    var handani = parent.document.querySelector('.hand_animation');
+                    
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                   
+                    jq(phonedevicestatic).css("opacity", "1.0");
+                    jq(handani).css("opacity", "1.0"); 
+                    
+                    myvid.pause();
+                    
+                    
+                    console.log(":::pointerup:::::");
+                
+                } });
+              //pointerdown//
+              
+                
+                
+                 //pointercancel//
+                jq(touch.surface).on({'pointercancel': function(){ 
+                  // event.preventDefault();
+                    //event.stopPropagation();
+                    //event.stopImmediatePropagation();
+                    
+                  
+                    var phonedevicestatic = parent.document.querySelector('#phonedevice');
+                    var handani = parent.document.querySelector('.hand_animation');
+                    var myvid = parent.document.querySelector('#stormvideo');
+                   
+                   
+                    jq(phonedevicestatic).css("opacity", "1.0");
+                    jq(handani).css("opacity", "1.0"); 
+                    
+                    myvid.pause();
+                    
+                    
+                    console.log(":::pointerup:::::");
+                
+                } });
+              //pointercancel//
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                /*
+				tapholdDetect(touch.surface, function(tapholdel){
+					
+                    
+                    console.log(":::::::TEST:::::HOLD::::::");
+                    
+                    
+				});
+                */
+                
+                
+                
+                // log info to lC and parent.labInfo
+				//cl.log('tapholdel', touch);
+
+                
+                
+                
+                
+                
+				// open or close based on state
+				if (lC.state == "open") {
+					adOpen();
+				} else {
+					adClose();
+				}
+			} catch (err) {
+				logError(err, false);
+			}
+	    };
+        
+        
+        
+function tapholdDetect(el, callback){
+			try {
+				// use callback argument or create dummy callback
+				touch.handleswipe = callback || function(tapholdel) {};
+				// Check if pointer events are supported.
+				if (window.PointerEvent) {
+					// Add Pointer Event Listener
+					touch.surface.addEventListener('pointerdown', handleGestureStart, true);
+					//touch.surface.addEventListener('pointermove', handleGestureMove, true);
+					touch.surface.addEventListener('pointerup', handleGestureEnd, true);
+					touch.surface.addEventListener('pointercancel', handleGestureEnd, true);
+                    
+                    //additional
+                    touch.surface.addEventListener('pointerover', handleGestureTest, true);
+                    touch.surface.addEventListener('pointerenter', handleGestureTest, true);
+                    touch.surface.addEventListener('pointerleave', handleGestureTest, true);
+                    touch.surface.addEventListener('pointerout', handleGestureTest, true);
+                    
+				} else {
+					// Add Touch Listener
+					touch.surface.addEventListener('touchstart', handleGestureStart, true);
+					//touch.surface.addEventListener('touchmove', handleGestureMove, true);
+					touch.surface.addEventListener('touchend', handleGestureEnd, true);
+					touch.surface.addEventListener('touchcancel', handleGestureEnd, true);
+                    
+                    //additional
+                    //touch.surface.addEventListener('touchcancel', handleGestureEnd, true);
+
+					// Add Mouse Listener
+					touch.surface.addEventListener('mousedown', handleGestureStart, true);
+				}
+			} catch (err) {
+				logError(err, false);
+			}
+	    }        
+        
+
+        
+//// TEST CODE///
+function handleGestureTest(evt){
+			try {
+				//evt.preventDefault();
+                //evt.stopPropagation();
+               // evt.stopImmediatePropagation();
+               // return false;
+               // console.log(evt.type , evt.target, evt);
+                
+                
+			} catch (err) {
+				logError(err, false);
+			}
+	    }        
+        
+        
+        
+function handleGestureStart(evt){
+			try {
+				evt.preventDefault();
+                evt.stopPropagation();
+                evt.stopImmediatePropagation();
+                return false;
+                console.log("------- handleGestureStart --> " + evt.type , evt.target, evt);
+                
+                
+				// ignore if we have multiple touches simultaneously
+				if(evt.touches && evt.touches.length > 1) {
+					return;
+				}
+
+				// Add the move and end listeners
+				if (window.PointerEvent) {
+					evt.target.setPointerCapture(evt.pointerId);
+				} else {
+					// Add Mouse Listeners
+					//parent.document.addEventListener('mousemove', handleGestureMove, true);
+					parent.document.addEventListener('mouseup', handleGestureEnd, true);
+				}
+
+				// init slides on first gesture
+				//if (!slides.ready) {
+				//	slidesInit();
+			//	}
+                holdinginit();
+                
+				touch.tapholdel = 'none'; // reset swipedir label to none
+				touch.startTime = new Date().getTime() // record time when finger first makes contact with surface
+				touch.initialTouchPos = getGesturePointFromEvent(evt); // capture the initial touch position
+			} catch (err) {
+				logError(err, false);
+			}
+	    };
+        
+        
+        function holdinginit(){
+            console.log("::::::HOLDING INIT::::::::");
+            var tapholdisready = true;
+                
+                if (tapholdisready){
+                    // add touch stuff in here
+					var tl = new TimelineLite();
+                    var tapzone = parent.document.querySelector('#tapzone');
+                    var taptext = parent.document.querySelector('#tapholdtxt');
+                    var myvid = parent.document.querySelector('#stormvideo');
+                    // Intro Animation //
+                    tl.to(taptext, 0.8, {alpha:0}, .2);
+                    myvid.play();
+                    console.log("::::TAP TEXT FADE OUT VIDEO PLAY::::: ");
+                } else {
+                    // Intro Animation //
+                    tl.to(taptext, 0.8, {alpha:1}, .2);
+                    myvid.pause();
+                    console.log("::::TAP TEXT FADE IN VIDEO PAUSE::::: ");
+                };
+        }
+
+	    function handleGestureMove(evt){
+			try {
+				evt.preventDefault(); // prevent scrolling when inside el
+
+				if(!touch.initialTouchPos) { // ignore if initialTouchPos was not captured
+					return;
+				}
+
+				touch.lastTouchPos = getGesturePointFromEvent(evt); // get lastTouchPos
+
+				// redraw screen on gesture end
+				if(touch.rafPending) { // dont request another redraw if were still waiting for last redraw
+					return;
+				}
+
+				touch.rafPending = true; // flag the redraw we are about to request
+			} catch (err) {
+				logError(err, false);
+			}
+	    }
+
+	    function handleGestureEnd(evt){
+			try {
+				evt.preventDefault();
+
+				if(evt.touches && evt.touches.length > 0) { // ignore if we still have active touches
+					return;
+				}
+
+				touch.rafPending = false; // no longer requesting redraws from this touch
+
+				// determine validity of gesture/swipe based on dir, time and distance
+				//touch.distX = touch.lastTouchPos.x - touch.initialTouchPos.x // get horizontal swipe dist
+				//touch.distY = touch.lastTouchPos.y - touch.initialTouchPos.y // get vertical swipe dist
+				
+                touch.elapsedTime = new Date().getTime() - touch.startTime // get time elapsed
+				
+                if (touch.elapsedTime <= touch.allowedTime) { // first condition for swipe met
+					if (Math.abs(touch.distX) >= touch.threshold && Math.abs(touch.distY) <= touch.restraint) { // 2nd condition for horizontal swipe met
+						touch.tapholdel = (touch.distX < 0) ? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+					} else if (Math.abs(touch.distY) >= touch.threshold && Math.abs(touch.distX) <= touch.restraint) { // 2nd condition for vertical swipe met
+						touch.tapholdel = (touch.distY < 0) ? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+					}
+				}
+                
+                // BOOLEAN ANSWER : TO TOUCH LONG OR HOLD/TAP
+
+				// Remove Event Listeners
+				if (window.PointerEvent) {
+					evt.target.releasePointerCapture(evt.pointerId);
+				} else {
+					// Remove Mouse Listeners
+					//parent.document.removeEventListener('mousemove', handleGestureMove, true);
+					parent.document.removeEventListener('mouseup', handleGestureEnd, true);
+				}
+
+				touch.handleswipe(touch.tapholdel); // use the new info calculated above
+			} catch (err) {
+				logError(err, false);
+			}
+	    }
+
+	    function getGesturePointFromEvent(evt) {
+			try {
+				var point = {};
+
+				if(evt.targetTouches) {
+					// Prefer Touch Events
+					point.x = evt.targetTouches[0].clientX;
+					point.y = evt.targetTouches[0].clientY;
+                    console.log("Touch Events || point.x =" + point.x);
+                    console.log("Touch Events || point.y =" + point.y);
+				} else {
+					// Either Mouse event or Pointer Event
+					point.x = evt.clientX;
+					point.y = evt.clientY;
+                    console.log("Mouse event or Pointer Event || point.x =" + point.x);
+                    console.log("Mouse event or Pointer Event || point.y =" + point.y);
+				}
+
+				return point;
+			} catch (err) {
+				logError(err, false);
+			}
+	    };        
+
+        
+        
+        
+        
+        
+        
+    
+// Get a reference to an element (OLD CODE)
+/*
+var tl = new TimelineLite();
+var tapzone = parent.document.querySelector('#tapzone');
+var taptext = parent.document.querySelector('#tapholdtxt');
+var myvid = parent.document.querySelector('#stormvideo');
+
+
+
+function introToDevice(){
+// Intro Animation //
+tl.from("#tapholdtxt", 0.8, {alpha:0}, 1.4);
+console.log(":::: INTRO ANIMATION PLAYS ------");    
+
+};
+
+
+
+// Create a manager to manager the element
+var manager = new Hammer.Manager(tapzone);
+
+// Create a recognizer
+var Press = new Hammer.Press({
+  time: 200
+});
+
+// Add the recognizer to the manager
+manager.add(Press);
+
+
+// Subscribe to desired event
+manager.on('press', function(e) {
+ // e.target.classList.toggle('taptoreveal.hide-opacity');
+    myvid.play();
+   // fadeOutEffect();
+    console.log(" ---- press ----- ");
+    
+});
+
+
+
+// Subscribe to desired event
+manager.on('pressup', function(e) {
+ // e.target.classList.toggle('taptoreveal.hide-opacity');
+    tl.to(tapzone, 0.8, {alpha:1});
+    myvid.pause();
+    console.log(" ---- press  up----- ");
+    
+});
+
+
+
+function fadeOutEffect() {
+    var fadeTarget = parent.document.getElementById("tapzone");
+    var fadeEffect = setInterval(function () {
+
+        if (!fadeTarget.style.opacity) {
+            fadeTarget.style.opacity = 1;
+        }
+        if (fadeTarget.style.opacity < 0.1) {
+            clearInterval(fadeEffect);
+        } else {
+            fadeTarget.style.opacity -= 0.1;
+        }
+    }, 50);
+
+};
+
+
+function fadeItback() {
+    var fadeinTarget = parent.document.getElementById("tapzone");
+         myvid.pause();
+         var fadeInEffect = setInterval(function () {
+
+        if (!fadeinTarget.style.opacity) {
+            fadeinTarget.style.opacity = 0;
+        }
+        if (fadeinTarget.style.opacity < 1) {
+            clearInterval(fadeInEffect);
+        } else {
+            fadeinTarget.style.opacity += 1;
+        }
+    }, 50);
+        
+    console.log(":::FADE BACK TO HOME SCREEN ::::");
+
+};
+  */      
+        
+
+//end of TAP-HOLD FUNCTIONALITY //
+
+        
+        function animEndCallback(evt) {
+		  // console.log("animEndCallback", evt);
+		  // remove this callback from the element
+		  evt.target.removeEventListener(touch.animEndEvent, animEndCallback);
+		  // any additional action after this animation ends?
+		  switch (evt.animationName) {
+		    case 'fade-out':
+		      evt.target.className = 'lab-hidden';
+		      break;
+		    default:
+		      evt.target.className = '';
+		      break;
+		  }
+		}
+
+        
+	    function getAnimationEndEventName(){
+	      // Function from David Walsh: http://davidwalsh.name/css-animation-callback
+		  try {
+			  var t,
+			  el = document.createElement("fakeelement");
+
+			  var transitions = {
+				  "animation"      : "animationend",
+				  "OAnimation"     : "oAnimationEnd",
+				  "MozAnimation"   : "animationend",
+				  "WebkitAnimation": "webkitAnimationEnd"
+			  }
+
+			  for (t in transitions){
+				  if (el.style[t] !== undefined){
+					  return transitions[t];
+				  }
+			  }
+		  } catch (err) {
+			  logError(err, false);
+		  }
+	    }
+
+		/*END STORM SWIPER ADDITIONS*/
+	</script>
+</body>
+
+</html>
